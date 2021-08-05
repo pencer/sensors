@@ -5,7 +5,10 @@ import config
  
 def on_connect(client, userdata, flag, rc):
   print("Connected with result code " + str(rc))
-  client.subscribe("hello/world") # Topic to subscribe
+  client.subscribe("room1/#") # Topic to subscribe
+  #client.subscribe("room1/temparature1") # Topic to subscribe
+  #client.subscribe("room1/pressure1") # Topic to subscribe
+  #client.subscribe("room1/humidity1") # Topic to subscribe
  
 def on_disconnect(client, userdata, flag, rc):
   if rc != 0:
