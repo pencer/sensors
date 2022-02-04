@@ -15,7 +15,7 @@ class SensorManager:
 
         checkdb = self.conn.execute("SELECT * FROM sqlite_master WHERE type='table' and name='%s'" % self.dbtable)
         if checkdb.fetchone() == None:
-            create_table = "create table {} (id integer primary key autoincrement, timestamp varchar(20), temp real, humid real, press real)".format(self.dbtable)
+            create_table = "create table {} (id integer primary key autoincrement, timestamp varchar(20), device varchar(20), temparature real, humidity real, pressure real)".format(self.dbtable)
             self.c.execute(create_table)
             self.conn.commit()
 
@@ -32,12 +32,12 @@ class SensorManager:
  
     def on_message(self, client, userdata, msg):
         print("message: '{}' on topic {}".format(msg.payload, msg.topic))
-        sql = 'insert into sensor1 (timestamp, temp, humid, press) values (?,?,?,?)'
+        sql = 'insert into sensor1 (timestamp, device, temparature, humidity, pressure) values (?,?,?,?,?)'
         print(str(msg.payload.decode("utf-8","ignore")))
         recv = json.loads(str(msg.payload.decode("utf-8","ignore")))
-        dv = recv["device"]
+        device = recv["device"]
         pl = recv["payload"]
-        data = (pl["time"], pl["temparature"], pl["humidity"], pl["pressure"])
+        data = (pl["time"], device, pl["temparature"], pl["humidity"], pl["pressure"])
         print(data)
         #self.conn = sqlite3.connect(self.dbname)
         #self.c = self.conn.cursor()
