@@ -86,6 +86,7 @@ def main():
             if use_led:
                 GPIO.output(18, 0)
             sleep(4)
+            sleep(5)
     except KeyboardInterrupt:
         if use_led:
             GPIO.cleanup(17)
