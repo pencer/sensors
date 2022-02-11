@@ -24,7 +24,9 @@ def on_disconnect(client, userdata, flag, rc):
          print("Unexpected disconnection.")
  
 def on_publish(client, userdata, mid):
-    print("publish: {0}".format(mid))
+    verbose = 1
+    if verbose > 1:
+        print("publish: {0}".format(mid))
  
 def main():
     use_led = False
@@ -72,8 +74,8 @@ def main():
             data["payload"]["temparature"] = str("{:.1f}".format(bme280ch1.T))
             data["payload"]["pressure"] = str("{:.1f}".format(bme280ch1.P))
             data["payload"]["humidity"] = str("{:.1f}".format(bme280ch1.H))
-            print(data)
-            print(json.dumps(data))
+            #print(data)
+            #print(json.dumps(data))
             client.publish("room1/data", format(json.dumps(data)))
             #client.publish("room1/temparature1","{:.1f}".format(bme280ch1.T))
             #client.publish("room1/pressure1","{:.1f}".format(bme280ch1.P))
