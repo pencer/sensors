@@ -56,7 +56,7 @@ def main():
     client.connect(config.broker, 1883, 60) 
 
     data = {}
-    data["device"] = socket.gethostname()
+    data["device"] = str(socket.gethostname())
     data["payload"] = {}
 
     client.loop_start()
@@ -68,11 +68,12 @@ def main():
             r1 = bme280ch1.meas()
             if not r1:
                 print('BME280 0x76 error')
-            data["payload"]["time"] = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S)")
-            data["payload"]["temparature"] = "{:.1f}".format(bme280ch1.T)
-            data["payload"]["pressure"] = "{:.1f}".format(bme280ch1.P)
-            data["payload"]["humidity"] = "{:.1f}".format(bme280ch1.H)
+            data["payload"]["time"] = str(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+            data["payload"]["temparature"] = str("{:.1f}".format(bme280ch1.T))
+            data["payload"]["pressure"] = str("{:.1f}".format(bme280ch1.P))
+            data["payload"]["humidity"] = str("{:.1f}".format(bme280ch1.H))
             print(data)
+            print(json.dumps(data))
             client.publish("room1/data", format(json.dumps(data)))
             #client.publish("room1/temparature1","{:.1f}".format(bme280ch1.T))
             #client.publish("room1/pressure1","{:.1f}".format(bme280ch1.P))
