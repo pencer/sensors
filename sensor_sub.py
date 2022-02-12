@@ -8,6 +8,10 @@ import json
  
 class SensorManager:
     def __init__(self):
+        self.m_devices = []
+        self.m_data = {}
+        self.m_last_YmdHM = {}
+
         self.dbname = 'room1.db'
         self.dbtable = 'sensor1'
         self.conn = sqlite3.connect(self.dbname)
@@ -43,6 +47,33 @@ class SensorManager:
         #self.c = self.conn.cursor()
         self.c.execute(sql, data)
         self.conn.commit()
+
+        if device not in self.m_devices:
+            print("new deivce: {}".format(device))
+            self.m_devices.append(device)
+            self.m_data[device] = []
+            self.m_last_YmdHM[device] = ""
+
+        self.m_data[device].append(data)
+
+        t_num = len(self.m_data[device])
+        print(t_num)
+
+        # output to CSV file
+        if t_num >= 2:
+            print("write to csv")
+            with open("data_{}.csv".format(device), 'a') as f:
+                for d in self.m_data[device]:
+                    cur_YmdHM = d[0][:16]
+                    print(cur_YmdHM)
+                    if self.m_last_YmdHM[device] != cur_YmdHM:
+                        # ignore a change within a minute
+                        print("{},{},{},{},{},{},{}".format(d[0],d[2],d[2],d[4],d[4],d[3],d[3]), file=f)
+                        self.m_last_YmdHM[device] = cur_YmdHM
+
+            # clear
+            self.m_data[device] = []
+            t_num = 0
  
 def main():
     mngr = SensorManager()
