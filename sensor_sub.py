@@ -3,7 +3,7 @@
 import paho.mqtt.client as mqtt
 import config
 
-import sqlite3
+#import sqlite3
 import json
  
 class SensorManager:
@@ -12,16 +12,16 @@ class SensorManager:
         self.m_data = {}
         self.m_last_YmdHM = {}
 
-        self.dbname = 'room1.db'
-        self.dbtable = 'sensor1'
-        self.conn = sqlite3.connect(self.dbname)
-        self.c = self.conn.cursor()
+        #self.dbname = 'room1.db'
+        #self.dbtable = 'sensor1'
+        #self.conn = sqlite3.connect(self.dbname)
+        #self.c = self.conn.cursor()
 
-        checkdb = self.conn.execute("SELECT * FROM sqlite_master WHERE type='table' and name='%s'" % self.dbtable)
-        if checkdb.fetchone() == None:
-            create_table = "create table {} (id integer primary key autoincrement, timestamp varchar(20), device varchar(20), temparature real, humidity real, pressure real)".format(self.dbtable)
-            self.c.execute(create_table)
-            self.conn.commit()
+        #checkdb = self.conn.execute("SELECT * FROM sqlite_master WHERE type='table' and name='%s'" % self.dbtable)
+        #if checkdb.fetchone() == None:
+        #    create_table = "create table {} (id integer primary key autoincrement, timestamp varchar(20), device varchar(20), temparature real, humidity real, pressure real)".format(self.dbtable)
+        #    self.c.execute(create_table)
+        #    self.conn.commit()
 
     def on_connect(self, client, userdata, flag, rc):
         print("Connected with result code " + str(rc))
@@ -36,17 +36,17 @@ class SensorManager:
  
     def on_message(self, client, userdata, msg):
         #print("message: '{}' on topic {}".format(msg.payload, msg.topic))
-        sql = 'insert into sensor1 (timestamp, device, temparature, humidity, pressure) values (?,?,?,?,?)'
+        #sql = 'insert into sensor1 (timestamp, device, temparature, humidity, pressure) values (?,?,?,?,?)'
         #print(str(msg.payload.decode("utf-8","ignore")))
         recv = json.loads(str(msg.payload.decode("utf-8","ignore")))
         device = recv["device"]
         pl = recv["payload"]
         data = (pl["time"], device, pl["temparature"], pl["humidity"], pl["pressure"])
         #print(data)
-        #self.conn = sqlite3.connect(self.dbname)
-        #self.c = self.conn.cursor()
-        self.c.execute(sql, data)
-        self.conn.commit()
+        ##self.conn = sqlite3.connect(self.dbname)
+        ##self.c = self.conn.cursor()
+        #self.c.execute(sql, data)
+        #self.conn.commit()
 
         if device not in self.m_devices:
             print("new deivce: {}".format(device))
