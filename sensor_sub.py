@@ -35,14 +35,14 @@ class SensorManager:
              print("Unexpected disconnection.")
  
     def on_message(self, client, userdata, msg):
-        print("message: '{}' on topic {}".format(msg.payload, msg.topic))
+        #print("message: '{}' on topic {}".format(msg.payload, msg.topic))
         sql = 'insert into sensor1 (timestamp, device, temparature, humidity, pressure) values (?,?,?,?,?)'
-        print(str(msg.payload.decode("utf-8","ignore")))
+        #print(str(msg.payload.decode("utf-8","ignore")))
         recv = json.loads(str(msg.payload.decode("utf-8","ignore")))
         device = recv["device"]
         pl = recv["payload"]
         data = (pl["time"], device, pl["temparature"], pl["humidity"], pl["pressure"])
-        print(data)
+        #print(data)
         #self.conn = sqlite3.connect(self.dbname)
         #self.c = self.conn.cursor()
         self.c.execute(sql, data)
@@ -57,15 +57,14 @@ class SensorManager:
         self.m_data[device].append(data)
 
         t_num = len(self.m_data[device])
-        print(t_num)
+        #print(t_num)
 
         # output to CSV file
         if t_num >= 2:
-            print("write to csv")
+            #print("write to csv")
             with open("data_{}.csv".format(device), 'a') as f:
                 for d in self.m_data[device]:
                     cur_YmdHM = d[0][:16]
-                    print(cur_YmdHM)
                     if self.m_last_YmdHM[device] != cur_YmdHM:
                         # ignore a change within a minute
                         print("{},{},{},{},{},{},{}".format(d[0],d[2],d[2],d[4],d[4],d[3],d[3]), file=f)
