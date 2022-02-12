@@ -60,7 +60,8 @@ class SensorManager:
         #print(t_num)
 
         # output to CSV file
-        if t_num >= 2:
+        l_interval = 5
+        if t_num >= l_interval:
             #print("write to csv")
             with open("data_{}.csv".format(device), 'a') as f:
                 for d in self.m_data[device]:
