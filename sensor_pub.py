@@ -17,16 +17,17 @@ from bme280i2c import BME280I2C
 import RPi.GPIO as GPIO
 
 def on_connect(client, userdata, flag, rc):
-    print("Connected with result code " + str(rc))
+    print("Connected with result code " + str(rc), flush=True)
  
 def on_disconnect(client, userdata, flag, rc):
+    print("Disconnected with result code " + str(rc), flush=True)
     if rc != 0:
-         print("Unexpected disconnection.")
+         print("Unexpected disconnection.", flush=True)
  
 def on_publish(client, userdata, mid):
     verbose = 1
     if verbose > 1:
-        print("publish: {0}".format(mid))
+        print("publish: {0}".format(mid), flush=True)
  
 def main():
     use_led = False
@@ -45,9 +46,9 @@ def main():
     r1 = bme280ch1.meas()
     r2 = bme280ch2.meas()
     if not (r1 or r2):
-        print('No Sensor Available')
+        print('No Sensor Available', flush=True)
     if r1:
-        print('BME280 0x76')
+        print('BME280 0x76', flush=True)
 
     # MQTT
     client = mqtt.Client()
@@ -69,7 +70,7 @@ def main():
             #client.publish("hello/world","Hello, World!")
             r1 = bme280ch1.meas()
             if not r1:
-                print('BME280 0x76 error')
+                print('BME280 0x76 error', flush=True)
             data["payload"]["time"] = str(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
             data["payload"]["temparature"] = str("{:.1f}".format(bme280ch1.T))
             data["payload"]["pressure"] = str("{:.1f}".format(bme280ch1.P))
