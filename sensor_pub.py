@@ -24,7 +24,11 @@ def on_connect(client, userdata, flag, rc):
 def on_disconnect(client, userdata, rc):
     print("Disconnected", flush=True)
     if rc != 0:
-         print("Unexpected disconnection.", flush=True)
+        print("Unexpected disconnection.", flush=True)
+        try:
+            client.reconnect()
+        except:
+            print("Failed to reconnect", flush=True)
  
 def on_publish(client, userdata, mid):
     if verbose > 1:
