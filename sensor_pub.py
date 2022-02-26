@@ -16,6 +16,8 @@ from bme280i2c import BME280I2C
 # LEDs
 import RPi.GPIO as GPIO
 
+verbose = 1
+
 def on_connect(client, userdata, flag, rc):
     print("Connected with result code " + str(rc), flush=True)
  
@@ -25,10 +27,13 @@ def on_disconnect(client, userdata, flag, rc):
          print("Unexpected disconnection.", flush=True)
  
 def on_publish(client, userdata, mid):
-    verbose = 1
     if verbose > 1:
         print("publish: {0}".format(mid), flush=True)
  
+def on_log(client, userdata, level, buff):
+    if verbose > 1:
+        print(buff, flush=True);
+
 def main():
     use_led = False
 
@@ -55,6 +60,7 @@ def main():
     client.on_connect = on_connect
     client.on_disconnect = on_disconnect
     client.on_publish = on_publish
+    client.on_log = on_log
     client.username_pw_set(config.username, config.password)
     client.connect(config.broker, 1883, 60) 
 
@@ -75,7 +81,8 @@ def main():
             data["payload"]["temparature"] = str("{:.1f}".format(bme280ch1.T))
             data["payload"]["pressure"] = str("{:.1f}".format(bme280ch1.P))
             data["payload"]["humidity"] = str("{:.1f}".format(bme280ch1.H))
-            #print(data)
+            if verbose > 1:
+                print(data, flush=True)
             #print(json.dumps(data))
             client.publish("room1/data", format(json.dumps(data)))
             #client.publish("room1/temparature1","{:.1f}".format(bme280ch1.T))
