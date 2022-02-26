@@ -21,8 +21,8 @@ verbose = 1
 def on_connect(client, userdata, flag, rc):
     print("Connected with result code " + str(rc), flush=True)
  
-def on_disconnect(client, userdata, flag, rc):
-    print("Disconnected with result code " + str(rc), flush=True)
+def on_disconnect(client, userdata, rc):
+    print("Disconnected", flush=True)
     if rc != 0:
          print("Unexpected disconnection.", flush=True)
  
