@@ -24,7 +24,7 @@ class SensorManager:
         #    self.conn.commit()
 
     def on_connect(self, client, userdata, flag, rc):
-        print("Connected with result code " + str(rc))
+        print("Connected with result code " + str(rc), flush=True)
         client.subscribe("room1/#") # Topic to subscribe
         #client.subscribe("room1/temparature1") # Topic to subscribe
         #client.subscribe("room1/pressure1") # Topic to subscribe
@@ -32,7 +32,7 @@ class SensorManager:
  
     def on_disconnect(self, client, userdata, flag, rc):
         if rc != 0:
-             print("Unexpected disconnection.")
+            print("Unexpected disconnection.", flush=True)
  
     def on_message(self, client, userdata, msg):
         #print("message: '{}' on topic {}".format(msg.payload, msg.topic))
@@ -49,7 +49,7 @@ class SensorManager:
         #self.conn.commit()
 
         if device not in self.m_devices:
-            print("new deivce: {}".format(device))
+            print("new deivce: {}".format(device), flush=True)
             self.m_devices.append(device)
             self.m_data[device] = []
             self.m_last_YmdHM[device] = ""
