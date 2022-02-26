@@ -33,6 +33,10 @@ class SensorManager:
     def on_disconnect(self, client, userdata, flag, rc):
         if rc != 0:
             print("Unexpected disconnection.", flush=True)
+            try:
+                client.reconnect()
+            except:
+                print("Failed to reconnect", flush=True)
  
     def on_message(self, client, userdata, msg):
         #print("message: '{}' on topic {}".format(msg.payload, msg.topic))
