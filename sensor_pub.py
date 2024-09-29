@@ -70,6 +70,7 @@ def main():
 
     data = {}
     data["device"] = str(socket.gethostname())
+    data["ipaddr"] = str(client.socket().getsockname())
     data["payload"] = {}
 
     client.loop_start()
