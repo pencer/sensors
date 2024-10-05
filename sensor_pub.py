@@ -9,6 +9,7 @@ from time import sleep
 import json
 import datetime
 import socket
+import subprocess
  
 # Sensors
 from bme280i2c import BME280I2C
@@ -86,6 +87,8 @@ def main():
             data["payload"]["temparature"] = str("{:.1f}".format(bme280ch1.T))
             data["payload"]["pressure"] = str("{:.1f}".format(bme280ch1.P))
             data["payload"]["humidity"] = str("{:.1f}".format(bme280ch1.H))
+            res = subprocess.run(["vcgencmd", "measure_temp"], encoding='utf-8', stdout=subprocess.PIPE)
+            data["payload"]["cpu_temp"] = res.stdout.strip()
             if verbose > 1:
                 print(data, flush=True)
             #print(json.dumps(data))
